@@ -1,10 +1,24 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { FoodModule } from './food/food.module';
+import { IngredientModule } from './ingredient/ingredient.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot(), // Load biến môi trường từ .env
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: process.env.DB_PASSWORD || 'your_password',
+      database: 'Food_planner',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    IngredientModule,
+    FoodModule,
+  ],
 })
 export class AppModule {}
