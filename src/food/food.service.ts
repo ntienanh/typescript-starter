@@ -11,11 +11,25 @@ export class FoodService {
   }
 
   async findAll(page: number = 1, pageSize: number = 10) {
-    return this.prisma.food.findMany({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      include: { ingredients: true },
-    });
+    const skip = (page - 1) * pageSize;
+    const [foods, total] = await this.prisma.$transaction([
+      this.prisma.food.findMany({
+        skip,
+        take: pageSize,
+        include: { ingredients: true }, // Bao gồm danh sách nguyên liệu
+      }),
+      this.prisma.food.count(),
+    ]);
+
+    return {
+      data: foods,
+      meta: {
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      },
+    };
   }
 
   async addIngredient(foodId: string, ingredientId: string) {

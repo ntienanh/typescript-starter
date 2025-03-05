@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
 
 @Controller('ingredient')
@@ -11,7 +11,10 @@ export class IngredientController {
   }
 
   @Get()
-  findAll() {
-    return this.ingredientService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    return this.ingredientService.findAll(Number(page), Number(pageSize));
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { FoodService } from './food.service';
 
 @Controller('food')
@@ -11,8 +11,11 @@ export class FoodController {
   }
 
   @Get()
-  findAll() {
-    return this.foodService.findAll();
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('pageSize') pageSize: number = 10,
+  ) {
+    return this.foodService.findAll(Number(page), Number(pageSize));
   }
 
   @Post(':foodId/ingredient/:ingredientId')
