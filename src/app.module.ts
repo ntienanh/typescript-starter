@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { FoodModule } from './food/food.module';
 import { IngredientModule } from './ingredient/ingredient.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -17,8 +18,10 @@ import { IngredientModule } from './ingredient/ingredient.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    IngredientModule,
     FoodModule,
+    IngredientModule,
   ],
+  providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class AppModule {}

@@ -1,45 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Ingredient } from './entities/ingredient.entity';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class IngredientService {
-  constructor(
-    @InjectRepository(Ingredient)
-    private readonly ingredientRepository: Repository<Ingredient>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async create(createIngredientDto: CreateIngredientDto): Promise<Ingredient> {
-    const ingredient = this.ingredientRepository.create(createIngredientDto);
-    return await this.ingredientRepository.save(ingredient);
+  async create(data: Prisma.IngredientCreateInput) {
+    return this.prisma.ingredient.create({ data });
   }
 
-  async findAll(): Promise<Ingredient[]> {
-    return await this.ingredientRepository.find();
-  }
-
-  async findOne(id: number): Promise<Ingredient> {
-    const ingredient = await this.ingredientRepository.findOne({
-      where: { id },
-    });
-    if (!ingredient)
-      throw new NotFoundException(`Ingredient with id ${id} not found`);
-    return ingredient;
-  }
-
-  async update(
-    id: number,
-    updateIngredientDto: UpdateIngredientDto,
-  ): Promise<Ingredient> {
-    await this.ingredientRepository.update(id, updateIngredientDto);
-    return this.findOne(id);
-  }
-
-  async remove(id: number): Promise<void> {
-    const ingredient = await this.findOne(id);
-    await this.ingredientRepository.remove(ingredient);
+  async findAll() {
+    return this.prisma.ingredient.findMany({ include: { foods: true } });
   }
 }

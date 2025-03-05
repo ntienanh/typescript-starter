@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { IngredientService } from './ingredient.service';
 import { IngredientController } from './ingredient.controller';
-import { Ingredient } from './entities/ingredient.entity';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ingredient])],
-  controllers: [IngredientController],
+  imports: [PrismaModule],
   providers: [IngredientService],
+  controllers: [IngredientController],
 })
 export class IngredientModule {}

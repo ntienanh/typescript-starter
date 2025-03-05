@@ -1,45 +1,17 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { IngredientService } from './ingredient.service';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 
-@Controller('ingredients')
+@Controller('ingredient')
 export class IngredientController {
   constructor(private readonly ingredientService: IngredientService) {}
 
   @Post()
-  create(@Body() createIngredientDto: CreateIngredientDto) {
-    return this.ingredientService.create(createIngredientDto);
+  create(@Body() createIngredientDto: { name: string }) {
+    return this.ingredientService.create({ name: createIngredientDto.name });
   }
 
   @Get()
   findAll() {
     return this.ingredientService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ingredientService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateIngredientDto: UpdateIngredientDto,
-  ) {
-    return this.ingredientService.update(+id, updateIngredientDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ingredientService.remove(+id);
   }
 }
