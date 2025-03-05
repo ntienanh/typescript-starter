@@ -10,8 +10,12 @@ export class FoodService {
     return this.prisma.food.create({ data });
   }
 
-  async findAll() {
-    return this.prisma.food.findMany({ include: { ingredients: true } });
+  async findAll(page: number = 1, pageSize: number = 10) {
+    return this.prisma.food.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: { ingredients: true },
+    });
   }
 
   async addIngredient(foodId: string, ingredientId: string) {
