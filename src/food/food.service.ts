@@ -12,11 +12,26 @@ export class FoodService {
 
   async findAll(page: number = 1, pageSize: number = 10) {
     const skip = (page - 1) * pageSize;
+
     const [foods, total] = await this.prisma.$transaction([
       this.prisma.food.findMany({
         skip,
         take: pageSize,
-        include: { ingredients: true }, // Bao gồm danh sách nguyên liệu
+        select: {
+          id: true,
+          name: true,
+          description: true, // Đảm bảo có field này nếu muốn truy vấn
+          image: true,
+          minCalories: true,
+          maxCalories: true,
+          ingredients: {
+            select: {
+              ingredient: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+        },
       }),
       this.prisma.food.count(),
     ]);

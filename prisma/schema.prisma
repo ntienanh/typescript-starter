@@ -16,10 +16,16 @@ datasource db {
 model Food {
   id          String       @id @default(uuid())
   name        String       @unique
+  description String?
+  image       String?
+  minCalories Int?          @default(0) // ✅ Thêm default
+  maxCalories Int?          @default(0) // ✅ Thêm default
+
   ingredients FoodIngredient[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
+
 
 model Ingredient {
   id          String       @id @default(uuid())

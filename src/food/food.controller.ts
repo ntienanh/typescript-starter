@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { FoodService } from './food.service';
+import { CreateFoodDto } from './dto/food.dto';
 
 @Controller('food')
 export class FoodController {
   constructor(private readonly foodService: FoodService) {}
 
   @Post()
-  create(@Body() createFoodDto: { name: string }) {
-    return this.foodService.create({ name: createFoodDto.name });
+  create(@Body() createFoodDto: CreateFoodDto) {
+    return this.foodService.create(createFoodDto);
   }
 
   @Get()
