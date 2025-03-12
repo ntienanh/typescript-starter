@@ -66,4 +66,11 @@ export class FoodService {
       data: { foodId, ingredientId },
     });
   }
+
+  async clearAll() {
+    await this.prisma.foodIngredient.deleteMany(); // Xóa liên kết ingredients trước nếu có ràng buộc khóa ngoại
+    await this.prisma.food.deleteMany(); // Xóa toàn bộ food
+
+    return { message: 'All food records have been deleted' };
+  }
 }

@@ -7,6 +7,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  Delete,
 } from '@nestjs/common';
 import { FoodService } from './food.service';
 import { CreateFoodDto } from './dto/food.dto';
@@ -85,5 +86,10 @@ export class FoodController {
     const imageUrl = await this.cloudinaryService.uploadImage(file);
 
     return { url: imageUrl };
+  }
+
+  @Delete('clearAll')
+  async clearAll() {
+    return this.foodService.clearAll();
   }
 }

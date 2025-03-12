@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Bật CORS
   app.enableCors({
-    origin: 'http://localhost:3001', // URL của frontend
+    origin: 'http://localhost:3000', // URL của frontend
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   });
