@@ -6,7 +6,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class FoodService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: Prisma.FoodCreateInput) {
+  // async create(data: Prisma.FoodCreateInput) {
+  //   return this.prisma.food.create({ data });
+  // }
+
+  async create(data: {
+    name: string;
+    image?: string;
+    minCalories: number;
+    maxCalories: number;
+  }) {
     return this.prisma.food.create({ data });
   }
 

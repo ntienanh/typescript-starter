@@ -1,10 +1,27 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
 import { FoodService } from './food.service';
 import { CreateFoodDto } from './dto/food.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.config';
+import {} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as multer from 'multer';
+import { Express } from 'express';
 
 @Controller('food')
 export class FoodController {
-  constructor(private readonly foodService: FoodService) {}
+  constructor(
+    private readonly foodService: FoodService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
   create(@Body() createFoodDto: CreateFoodDto) {
@@ -25,5 +42,18 @@ export class FoodController {
     @Param('ingredientId') ingredientId: string,
   ) {
     return this.foodService.addIngredient(foodId, ingredientId);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('image')) // 'image' là key trong Postman
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new Error('No file provided');
+    }
+
+    console.log('Received file:', file);
+    const imageUrl = await this.cloudinaryService.uploadImage(file);
+
+    return { url: imageUrl };
   }
 }
