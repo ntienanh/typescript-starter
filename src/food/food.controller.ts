@@ -24,9 +24,39 @@ export class FoodController {
   ) {}
 
   @Post()
-  create(@Body() createFoodDto: CreateFoodDto) {
-    return this.foodService.create(createFoodDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async createFood(
+    @Body()
+    createFoodDto: {
+      name: string;
+      description: string;
+      minCalories?: number;
+      maxCalories?: number;
+    },
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    let imageUrl = null;
+
+    if (file) {
+      imageUrl = await this.cloudinaryService.uploadImage(file);
+    }
+
+    return this.foodService.create({
+      ...createFoodDto,
+      minCalories: createFoodDto.minCalories
+        ? Number(createFoodDto.minCalories)
+        : undefined,
+      maxCalories: createFoodDto.maxCalories
+        ? Number(createFoodDto.maxCalories)
+        : undefined,
+      imageUrl,
+    });
   }
+
+  // @Post()
+  // create(@Body() createFoodDto: CreateFoodDto) {
+  //   return this.foodService.create(createFoodDto);
+  // }
 
   @Get()
   findAll(

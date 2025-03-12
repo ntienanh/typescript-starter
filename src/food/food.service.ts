@@ -6,17 +6,22 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class FoodService {
   constructor(private prisma: PrismaService) {}
 
-  // async create(data: Prisma.FoodCreateInput) {
-  //   return this.prisma.food.create({ data });
-  // }
-
   async create(data: {
     name: string;
-    image?: string;
-    minCalories: number;
-    maxCalories: number;
+    description: string;
+    minCalories?: number;
+    maxCalories?: number;
+    imageUrl?: string;
   }) {
-    return this.prisma.food.create({ data });
+    return this.prisma.food.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        minCalories: data.minCalories ? Number(data.minCalories) : null, // Chuyển về số
+        maxCalories: data.maxCalories ? Number(data.maxCalories) : null, // Chuyển về số
+        image: data.imageUrl,
+      },
+    });
   }
 
   async findAll(page: number = 1, pageSize: number = 10) {
