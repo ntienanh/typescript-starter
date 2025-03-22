@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,14 +12,14 @@ model Food {
   name        String       @unique
   description String?
   image       String?
-  minCalories Int?          @default(0) // ✅ Thêm default
-  maxCalories Int?          @default(0) // ✅ Thêm default
+  minCalories Int?          @default(0)
+  maxCalories Int?          @default(0)
 
-  ingredients FoodIngredient[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  ingredients  FoodIngredient[]
+  schedules    FoodSchedule[] // ✅ Quan hệ với FoodSchedule
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
-
 
 model Ingredient {
   id          String       @id @default(uuid())
@@ -43,3 +37,13 @@ model FoodIngredient {
 
   @@id([foodId, ingredientId])
 }
+
+model FoodSchedule {
+  id        String   @id @default(uuid())
+  date      DateTime
+  foodId    String?   // ✅ Phải là `String?` để chấp nhận null
+  food      Food?     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

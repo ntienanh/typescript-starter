@@ -6,6 +6,7 @@ import { IngredientModule } from './ingredient/ingredient.module';
 import { PrismaService } from './prisma/prisma.service';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { FoodScheduleModule } from './food-schedule/food-schedule.module';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { MulterModule } from '@nestjs/platform-express';
     FoodModule,
     IngredientModule,
     MulterModule.register(), // ✅ Đăng ký Multer
-    CloudinaryModule,
+    CloudinaryModule, FoodScheduleModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],
