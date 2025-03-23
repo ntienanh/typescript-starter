@@ -92,4 +92,9 @@ export class FoodController {
   async clearAll() {
     return this.foodService.clearAll();
   }
+
+  @Delete(':id')
+  async delete(@Param('id') foodId: string) {
+    return this.foodService.deleteById(foodId);
+  }
 }
