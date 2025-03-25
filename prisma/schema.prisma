@@ -47,3 +47,14 @@ model FoodSchedule {
   updatedAt DateTime @updatedAt
 }
 
+model Hook {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  usage       String?
+  behavior    String?
+  code        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

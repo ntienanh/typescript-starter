@@ -8,7 +8,7 @@ export class FoodService {
 
   async create(data: {
     name: string;
-    description: string;
+    description?: string; // 🔥 Không bắt buộc
     minCalories?: number;
     maxCalories?: number;
     imageUrl?: string;
@@ -16,9 +16,9 @@ export class FoodService {
     return this.prisma.food.create({
       data: {
         name: data.name,
-        description: data.description,
-        minCalories: data.minCalories ? Number(data.minCalories) : null, // Chuyển về số
-        maxCalories: data.maxCalories ? Number(data.maxCalories) : null, // Chuyển về số
+        description: data.description || null, // 🔥 Nếu không có, đặt thành null
+        minCalories: data.minCalories ? Number(data.minCalories) : null,
+        maxCalories: data.maxCalories ? Number(data.maxCalories) : null,
         image: data.imageUrl,
       },
     });
